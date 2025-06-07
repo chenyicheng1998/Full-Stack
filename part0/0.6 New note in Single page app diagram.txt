@@ -1,0 +1,8 @@
+sequenceDiagram
+    participant browser
+    participant server
+
+    browser->>+server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+        Note right of browser: The browser refresh the notes part by executing redrawNotes() function inside form.onsubmit, instead of waiting the server's response
+    server-->>-browser: Status Code 201 (Created)
+
