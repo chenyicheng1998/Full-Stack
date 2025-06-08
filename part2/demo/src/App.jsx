@@ -1,15 +1,13 @@
-const App = (props) => {
-  const { notes } = props
+import Note from './components/Note'
 
+const App = ({ notes }) => {
   return (
     <div>
       <h1>Notes</h1>
       <ul>
-        {notes.map((note, i) =>
-          <li key={i}>
-            {note.content}
-          </li>
-        )}
+        {notes.map((note) => (
+          <Note key={note.id} note={note} />
+        ))}
       </ul>
     </div>
   )
