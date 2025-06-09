@@ -21,23 +21,39 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
+
+    const existingPerson = persons.find(person => person.name === newName)
 
     const personObject = {
       name: newName,
       number: newNumber
     }
 
-    personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+
+      if (confirmUpdate) {
+        personService
+          .update(existingPerson.id, personObject)
+          .then(updatedPerson => {
+            setPersons(persons.map(p =>
+              p.id !== existingPerson.id ? p : updatedPerson
+            ))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
   }
 
   const handleDelete = (id, name) => {
