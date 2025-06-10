@@ -8,5 +8,8 @@
   },
   "author": "Yicheng CHEN",
   "license": "MIT",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
