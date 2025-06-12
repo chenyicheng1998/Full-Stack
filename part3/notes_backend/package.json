@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "notes_backend",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
