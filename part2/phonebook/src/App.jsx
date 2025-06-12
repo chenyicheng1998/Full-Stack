@@ -84,7 +84,7 @@ const App = () => {
   }
 
   const personsToShow = persons.filter(person =>
-    person.name.includes(filter)
+    person.name.toLowerCase().includes(filter.toLowerCase())
   )
 
   return (
