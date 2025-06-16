@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const Note = require('./models/note')
-const cors = require('cors')
+// const cors = require('cors')
 
 const app = express()
 
@@ -26,7 +26,7 @@ const errorHandler = (error, request, response, next) => {
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
-app.use(cors())
+// app.use(cors())
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
