@@ -52,7 +52,6 @@ app.get('/api/persons/:id', (request, response, next) => {
             }
         })
         .catch(error => next(error))
-
 })
 
 app.post('/api/persons', (request, response, next) => {
