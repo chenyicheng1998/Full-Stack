@@ -4,14 +4,21 @@ const app = express()
 const cors = require('cors')
 const Person = require('./models/person')
 
-// let persons = []
-
 morgan.token('body', (req) => JSON.stringify(req.body))
 
-app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
 app.use(express.static('dist'))
+app.use(express.json())
+
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next()
+}
+app.use(requestLogger)
 
 app.get('/api/persons', (request, response, next) => {
     Person
@@ -45,6 +52,7 @@ app.get('/api/persons/:id', (request, response, next) => {
             }
         })
         .catch(error => next(error))
+
 })
 
 
@@ -99,7 +107,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
-
 app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
