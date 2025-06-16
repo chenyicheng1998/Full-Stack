@@ -49,7 +49,8 @@ const App = () => {
             setNewNumber('')
           })
           .catch(error => {
-            setMessage({ text: `Information of ${newName} has already been removed from server`, type: 'error' })
+            const errorMessage = error.response?.data?.error || 'Failed to update contact';
+            setMessage({ text: errorMessage, type: 'error' });
             setTimeout(() => setMessage(null), 5000)
             setPersons(persons.filter(p => p.id !== existingPerson.id))
           })
@@ -64,6 +65,11 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          const errorMessage = error.response?.data?.error || 'Failed to add contact';
+          setMessage({ text: errorMessage, type: 'error' });
+          setTimeout(() => setMessage(null), 5000);
+        });
     }
   }
 
