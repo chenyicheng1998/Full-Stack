@@ -1,0 +1,29 @@
+{
+  "name": "notes_backend",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "test": "node --test",
+    "build:ui": "rm -rf dist && cd ../notes_frontend && npm run build && cp -r dist ../notes_backend",
+    "deploy:full": "npm run build:ui",
+    "lint": "eslint ."
+  },
+  "author": "Yicheng CHEN",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@stylistic/eslint-plugin-js": "^4.4.1",
+    "eslint": "^9.22.0",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.34.1"
+  }
+}
