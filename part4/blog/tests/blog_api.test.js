@@ -1,4 +1,4 @@
-const { test, beforeEach, after } = require('node:test')
+const { test, describe, beforeEach, after } = require('node:test')
 const assert = require('assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -131,6 +131,113 @@ test('blog without url is not added and returns 400', async () => {
   if (blogsAtEnd.body.length !== initialBlogs.length) {
     throw new Error('Blog without url should not be added')
   }
+})
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await api.get('/api/blogs')
+  const blogToDelete = blogsAtStart.body[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await api.get('/api/blogs')
+
+  assert.strictEqual(blogsAtEnd.body.length, initialBlogs.length - 1)
+
+  const titles = blogsAtEnd.body.map(r => r.title)
+  assert(!titles.includes(blogToDelete.title))
+})
+
+test('deleting a non-existent blog returns 404', async () => {
+  const nonExistentId = '5a422aa71b54a676234d17f8' // Valid format but doesn't exist
+
+  await api
+    .delete(`/api/blogs/${nonExistentId}`)
+    .expect(404)
+})
+
+test('deleting with invalid id format returns 400', async () => {
+  const invalidId = 'invalid-id-format'
+
+  await api
+    .delete(`/api/blogs/${invalidId}`)
+    .expect(400)
+})
+
+describe('updating a blog', () => {
+  test('succeeds with valid data', async () => {
+    const blogsAtStart = await api.get('/api/blogs')
+    const blogToUpdate = blogsAtStart.body[0]
+
+    const updatedData = {
+      title: 'Updated Title',
+      author: 'Updated Author',
+      url: 'http://updated.com',
+      likes: 999
+    }
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedData)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const updatedBlog = response.body
+    assert.strictEqual(updatedBlog.title, updatedData.title)
+    assert.strictEqual(updatedBlog.author, updatedData.author)
+    assert.strictEqual(updatedBlog.url, updatedData.url)
+    assert.strictEqual(updatedBlog.likes, updatedData.likes)
+
+    const blogsAtEnd = await api.get('/api/blogs')
+    assert.strictEqual(blogsAtEnd.body.length, initialBlogs.length)
+  })
+
+  test('fails with status code 404 if blog does not exist', async () => {
+    const nonExistentId = '5a422aa71b54a676234d17f8' // Valid format but doesn't exist
+    const updatedData = {
+      title: 'Will Not Update',
+      likes: 100
+    }
+
+    await api
+      .put(`/api/blogs/${nonExistentId}`)
+      .send(updatedData)
+      .expect(404)
+  })
+
+  test('fails with status code 400 if id is invalid', async () => {
+    const invalidId = 'invalid-id-format'
+    const updatedData = {
+      title: 'Will Not Update',
+      likes: 100
+    }
+
+    await api
+      .put(`/api/blogs/${invalidId}`)
+      .send(updatedData)
+      .expect(400)
+  })
+
+  test('updating only likes succeeds when other fields are missing', async () => {
+    const blogsAtStart = await api.get('/api/blogs')
+    const blogToUpdate = blogsAtStart.body[0]
+
+    const updatedData = {
+      likes: 123
+    }
+
+    const response = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedData)
+      .expect(200)
+
+    const updatedBlog = response.body
+    assert.strictEqual(updatedBlog.title, blogToUpdate.title) // remains unchanged
+    assert.strictEqual(updatedBlog.author, blogToUpdate.author) // remains unchanged
+    assert.strictEqual(updatedBlog.url, blogToUpdate.url) // remains unchanged
+    assert.strictEqual(updatedBlog.likes, updatedData.likes) // updated
+  })
 })
 
 after(async () => {
