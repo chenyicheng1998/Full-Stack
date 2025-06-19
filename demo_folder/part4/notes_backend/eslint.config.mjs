@@ -9,12 +9,12 @@ export default [
     languageOptions: {
       sourceType: 'commonjs',
       globals: {
-        ...globals.node,
+        ...globals.node
       },
-      ecmaVersion: 'latest',
+      ecmaVersion: 'latest'
     },
     plugins: {
-      '@stylistic/js': stylisticJs,
+      '@stylistic/js': stylisticJs
     },
     rules: {
       '@stylistic/js/indent': ['error', 2],
@@ -25,10 +25,10 @@ export default [
       'no-trailing-spaces': 'error',
       'object-curly-spacing': ['error', 'always'],
       'arrow-spacing': ['error', { before: true, after: true }],
-      'no-console': 'off',
-    },
+      'no-console': 'off'
+    }
   },
   {
-    ignores: ['dist/**'],
-  },
+    ignores: ['dist/**']
+  }
 ]
