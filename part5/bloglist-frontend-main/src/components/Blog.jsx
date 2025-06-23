@@ -1,7 +1,58 @@
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>  
-)
+import { useState } from 'react'
+
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
+  const [visible, setVisible] = useState(false)
+  
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
+  const toggleVisibility = () => {
+    setVisible(!visible)
+  }
+
+  const handleLike = () => {
+    const updatedBlog = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+    updateBlog(blog.id, updatedBlog)
+  }
+
+  const handleDelete = () => {
+    deleteBlog(blog)
+  }
+
+  const showWhenVisible = { display: visible ? '' : 'none' }
+
+  return (
+    <div style={blogStyle}>
+      <div>
+        {blog.title} {blog.author}
+        <button onClick={toggleVisibility}>
+          {visible ? 'hide' : 'view'}
+        </button>
+      </div>
+      <div style={showWhenVisible}>
+        <div>{blog.url}</div>
+        <div>
+          likes {blog.likes}
+          <button onClick={handleLike}>like</button>
+        </div>
+        <div>{blog.user.name}</div>
+        {user.username === blog.user.username && (
+          <button onClick={handleDelete}>remove</button>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export default Blog
