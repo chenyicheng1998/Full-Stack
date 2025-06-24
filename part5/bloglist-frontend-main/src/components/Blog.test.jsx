@@ -3,6 +3,7 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
+import { vi } from 'vitest'
 
 const blog = {
   id: '1',
@@ -62,4 +63,30 @@ test('shows URL and likes when view button is clicked', async () => {
   // Check that URL and likes are now displayed
   expect(screen.getByText('http://test.com')).toBeDefined()
   expect(screen.getByText('likes 5')).toBeDefined()
+})
+
+test('clicking like button twice calls event handler twice', async () => {
+  const mockHandler = vi.fn()
+
+  render(
+    <Blog
+      blog={blog}
+      updateBlog={mockHandler}
+      deleteBlog={() => { }}
+      user={user}
+    />
+  )
+
+  const userAgent = userEvent.setup()
+
+  // First click view button to show details
+  const viewButton = screen.getByText('view')
+  await userAgent.click(viewButton)
+
+  // Then click like button twice
+  const likeButton = screen.getByText('like')
+  await userAgent.click(likeButton)
+  await userAgent.click(likeButton)
+
+  expect(mockHandler.mock.calls).toHaveLength(2)
 })
