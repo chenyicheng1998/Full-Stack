@@ -1,0 +1,16 @@
+{
+  "name": "e2etest",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test --project=chromium --project=firefox",
+    "test:report": "playwright show-report"
+  },
+  "author": "Yicheng CHEN",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.53.1",
+    "@types/node": "^24.0.4"
+  }
+}
