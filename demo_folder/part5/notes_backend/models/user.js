@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Note'
     }
-  ]
+  ],
 })
 
 userSchema.set('toJSON', {
