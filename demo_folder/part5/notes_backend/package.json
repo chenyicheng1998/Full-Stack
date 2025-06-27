@@ -8,7 +8,8 @@
     "test": "cross-env  NODE_ENV=test node --test",
     "build:ui": "rm -rf dist && cd ../notes_frontend && npm run build && cp -r dist ../notes_backend",
     "deploy:full": "npm run build:ui",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "Yicheng CHEN",
   "license": "MIT",

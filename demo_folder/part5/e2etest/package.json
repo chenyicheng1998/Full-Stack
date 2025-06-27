@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test --project=chromium --project=firefox",
+    "test": "playwright test",
     "test:report": "playwright show-report"
   },
   "author": "Yicheng CHEN",
