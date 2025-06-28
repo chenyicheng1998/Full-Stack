@@ -1,12 +1,10 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
-import '@testing-library/jest-dom'
 import NoteForm from './NoteForm'
 import userEvent from '@testing-library/user-event'
 
 test('<NoteForm /> updates parent state and calls onSubmit', async () => {
   const user = userEvent.setup()
-  const createNote = jest.fn()
+  const createNote = vi.fn()
 
   render(<NoteForm createNote={createNote} />)
 

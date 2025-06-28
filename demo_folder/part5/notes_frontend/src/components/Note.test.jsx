@@ -1,5 +1,3 @@
-import React from 'react'
-import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Note from './Note'
@@ -13,7 +11,6 @@ test('renders content', () => {
   render(<Note note={note} />)
 
   const element = screen.getByText('Component testing is done with react-testing-library')
-  expect(element).toBeDefined()
 })
 
 test('clicking the button calls event handler once', async () => {
@@ -22,7 +19,7 @@ test('clicking the button calls event handler once', async () => {
     important: true
   }
 
-  const mockHandler = jest.fn()
+  const mockHandler = vi.fn()
 
   render(
     <Note note={note} toggleImportance={mockHandler} />
