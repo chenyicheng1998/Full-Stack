@@ -51,3 +51,8 @@ deploy
 "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
 "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
 ```
+
+```
+npm install mongoose
+npm install dotenv
+```

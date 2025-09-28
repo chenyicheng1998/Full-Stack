@@ -1,5 +1,5 @@
 {
-  "name": "phonebook_backend",
+  "name": "notes_backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,9 +11,9 @@
   "author": "Yicheng CHEN",
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "mongoose": "^8.18.2",
-    "morgan": "^1.10.1"
+    "mongoose": "^8.18.2"
   }
 }
