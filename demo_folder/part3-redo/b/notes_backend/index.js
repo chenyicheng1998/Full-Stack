@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 
 app.use(cors())
+app.use(express.json())
+app.use(express.static('dist')) // <--- 放在这里
 
 let notes = [
   {
@@ -30,7 +32,7 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
-app.use(express.json())
+// app.use(express.json())
 app.use(requestLogger)
 
 app.get('/', (request, response) => {
