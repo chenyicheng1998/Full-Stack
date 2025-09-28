@@ -1,7 +1,12 @@
-const Filter = ({ filter, setFilter }) => {
-    return (
-        <div>filter shown with <input value={filter} onChange={(e) => setFilter(e.target.value)} /></div>
-    )
+const Filter = ({ searchTerm, handleSearchChange }) => {
+  return (
+    <div>
+      filter shown with <input
+        value={searchTerm}
+        onChange={handleSearchChange}
+      />
+    </div>
+  )
 }
 
 export default Filter

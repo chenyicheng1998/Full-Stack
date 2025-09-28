@@ -1,20 +1,17 @@
-const Person = ({ person, handleDelete }) => {
-    return (
-        <p>
-            {person.name}: {person.number}
-            <button onClick={() => handleDelete(person.id, person.name)}>delete</button>
-        </p>
-    )
-}
+import Person from './Person'
 
-const Persons = ({ personsToShow, handleDelete }) => {
-    return (
-        <div>
-            {personsToShow.map((person) => (
-                <Person key={person.id} person={person} handleDelete={handleDelete} />
-            ))}
-        </div>
-    )
+const Persons = ({ personsToShow, deletePerson }) => {
+  return (
+    <ul>
+      {personsToShow.map(person =>
+        <Person 
+          key={person.id} 
+          person={person} 
+          deletePerson={() => deletePerson(person.id)}
+        />
+      )}
+    </ul>
+  )
 }
 
 export default Persons
