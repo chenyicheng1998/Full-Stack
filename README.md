@@ -16,3 +16,21 @@ npm install json-server --save-dev
 
 ```
 
+backend
+
+```
+npm init
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matti Luukkainen",
+  "license": "MIT"
+}
+
+npm install express
+```
