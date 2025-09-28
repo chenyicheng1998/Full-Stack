@@ -7,4 +7,12 @@
 # Notes
 ```
 npm create vite@latest introdemo -- --template react
+
+npm install axios
+
+npm install json-server --save-dev
+
+"server": "json-server -p 3001 db.json"
+
 ```
+
