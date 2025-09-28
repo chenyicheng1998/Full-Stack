@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 
+app.use(express.static('dist'))
+
 app.use(express.json())
 
 // Create a new token for the request body
