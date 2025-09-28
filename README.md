@@ -35,4 +35,6 @@ npm init
 npm install express
 
 npm install morgan
+
+npm install cors
 ```
