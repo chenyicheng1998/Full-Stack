@@ -7,7 +7,7 @@ const Person = require('./models/person')
 app.use(express.static('dist'))
 app.use(express.json())
 
-morgan.token('body', (req, res) => {
+morgan.token('body', (req) => {
   if (req.method === 'POST' || req.method === 'PUT') {
     return JSON.stringify(req.body)
   }
