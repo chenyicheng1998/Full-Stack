@@ -3,8 +3,6 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const Person = require('./models/person')
-// diagnostic: print model info
-console.log('Person model loaded, modelName =', Person.modelName)
 
 app.use(express.static('dist'))
 app.use(express.json())
