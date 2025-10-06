@@ -33,11 +33,11 @@ const App = () => {
     event.preventDefault()
 
     const existingPerson = persons.find(person => person.name === newName)
-    
+
     if (existingPerson) {
       if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
         const changedPerson = { ...existingPerson, number: newNumber }
-        
+
         personService
           .update(existingPerson.id, changedPerson)
           .then(returnedPerson => {
@@ -47,11 +47,16 @@ const App = () => {
             showNotification(`Updated ${returnedPerson.name}`)
           })
           .catch(error => {
-            showNotification(
-              `Information of ${existingPerson.name} has already been removed from server`,
-              'error'
-            )
-            setPersons(persons.filter(p => p.id !== existingPerson.id))
+            const errMsg = error.response && error.response.data && error.response.data.error
+            if (error.response && error.response.status === 404) {
+              showNotification(
+                `Information of ${existingPerson.name} has already been removed from server`,
+                'error'
+              )
+              setPersons(persons.filter(p => p.id !== existingPerson.id))
+            } else {
+              showNotification(errMsg || `Failed to update ${existingPerson.name}`, 'error')
+            }
             setNewName('')
             setNewNumber('')
           })
@@ -73,13 +78,14 @@ const App = () => {
         showNotification(`Added ${returnedPerson.name}`)
       })
       .catch(error => {
-        showNotification(`Failed to add ${newName}`, 'error')
+        const errMsg = error.response && error.response.data && error.response.data.error
+        showNotification(errMsg || `Failed to add ${newName}`, 'error')
       })
   }
 
   const deletePerson = (id) => {
     const person = persons.find(p => p.id === id)
-    
+
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
         .remove(id)
