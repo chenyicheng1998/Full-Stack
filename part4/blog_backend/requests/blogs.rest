@@ -1,0 +1,24 @@
+### Get all blogs
+GET http://localhost:3003/api/blogs
+
+### Add a new blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "First Blog Post",
+  "author": "John Doe",
+  "url": "https://example.com/first-post",
+  "likes": 5
+}
+
+### Add another blog
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "React patterns",
+  "author": "Michael Chan",
+  "url": "https://reactpatterns.com/",
+  "likes": 7
+}
