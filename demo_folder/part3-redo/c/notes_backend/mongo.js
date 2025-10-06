@@ -10,7 +10,6 @@ const password = process.argv[2]
 const url = `mongodb+srv://fullstack:${password}@cluster0.mqddk7w.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery', false)
-
 mongoose.connect(url)
 
 const noteSchema = new mongoose.Schema({
@@ -25,13 +24,13 @@ const Note = mongoose.model('Note', noteSchema)
 //   important: true,
 // })
 
-// note.save().then(result => {
-//   console.log('note saved!')
-//   mongoose.connection.close()
-// })
+// // note.save().then((result) => {
+// //   console.log('note saved!')
+// //   mongoose.connection.close()
+// // })
 
-Note.find({ important: true }).then(result => {
-  result.forEach(note => {
+Note.find({}).then((result) => {
+  result.forEach((note) => {
     console.log(note)
   })
   mongoose.connection.close()
