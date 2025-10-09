@@ -14,6 +14,12 @@ const api = supertest(app)
 describe('when there is initially some notes saved', () => {
   beforeEach(async () => {
     await Note.deleteMany({})
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User({ username: 'root', passwordHash })
+    await user.save()
+
     await Note.insertMany(helper.initialNotes)
   })
 
@@ -65,9 +71,13 @@ describe('when there is initially some notes saved', () => {
 
   describe('addition of a new note', () => {
     test('succeeds with valid data', async () => {
+      const usersAtStart = await helper.usersInDb()
+      const user = usersAtStart[0]
+
       const newNote = {
         content: 'async/await simplifies making async calls',
-        important: true
+        important: true,
+        userId: user.id
       }
 
       await api
