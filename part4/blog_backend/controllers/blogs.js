@@ -38,10 +38,34 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response) => {
   try {
+    // Check if token is provided
+    if (!request.token) {
+      return response.status(401).json({ error: 'token missing' })
+    }
+
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+      return response.status(404).json({ error: 'blog not found' })
+    }
+
+    // Check if the user is the creator of the blog
+    if (blog.user.toString() !== decodedToken.id.toString()) {
+      return response.status(403).json({ error: 'permission denied' })
+    }
+
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
   } catch (error) {
-    if (error.name === 'CastError') {
+    if (error.name === 'JsonWebTokenError') {
+      return response.status(401).json({ error: 'token invalid' })
+    } else if (error.name === 'TokenExpiredError') {
+      return response.status(401).json({ error: 'token expired' })
+    } else if (error.name === 'CastError') {
       response.status(400).json({ error: 'Invalid id' })
     } else {
       response.status(500).json({ error: 'Internal server error' })

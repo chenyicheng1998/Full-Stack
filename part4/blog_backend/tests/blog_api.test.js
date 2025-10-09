@@ -2,6 +2,7 @@ const assert = require('node:assert')
 const { test, after, beforeEach, describe } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
@@ -15,9 +16,15 @@ describe('when there is initially some blogs saved', () => {
     await User.deleteMany({})
 
     // Create a test user first
-    await helper.createTestUser()
+    const user = await helper.createTestUser()
 
-    await Blog.insertMany(helper.initialBlogs)
+    // Create blogs associated with the test user
+    const blogsWithUser = helper.initialBlogs.map(blog => ({
+      ...blog,
+      user: user._id
+    }))
+
+    await Blog.insertMany(blogsWithUser)
   })
 
   test('blogs are returned as json', async () => {
@@ -206,11 +213,16 @@ describe('when there is initially some blogs saved', () => {
   })
 
   describe('deletion of a blog', () => {
-    test('succeeds with status code 204 if id is valid', async () => {
+    test('succeeds with status code 204 if id is valid and user is the creator', async () => {
+      const token = await helper.getToken()
+
       const blogsAtStart = await helper.blogsInDb()
       const blogToDelete = blogsAtStart[0]
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
 
@@ -218,6 +230,43 @@ describe('when there is initially some blogs saved', () => {
       assert(!titles.includes(blogToDelete.title))
 
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+    })
+
+    test('fails with status code 401 if token is missing', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with status code 403 if user is not the creator', async () => {
+      // Create another user
+      const passwordHash = await bcrypt.hash('password2', 10)
+      const anotherUser = new User({
+        username: 'anotheruser',
+        name: 'Another User',
+        passwordHash
+      })
+      await anotherUser.save()
+
+      // Get token for the other user
+      const token = await helper.getToken('anotheruser')
+
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0] // This blog belongs to 'testuser'
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(403)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
   })
 
