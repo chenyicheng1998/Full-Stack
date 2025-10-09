@@ -30,3 +30,41 @@ Content-Type: application/json
   "name": "Another Test User",
   "password": "anotherpassword"
 }
+
+### Try to create user without username (should fail)
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "name": "No Username User",
+  "password": "testpassword"
+}
+
+### Try to create user without password (should fail)
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "nopassword",
+  "name": "No Password User"
+}
+
+### Try to create user with short username (should fail)
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "ab",
+  "name": "Short Username",
+  "password": "testpassword"
+}
+
+### Try to create user with short password (should fail)
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "shortpass",
+  "name": "Short Password User",
+  "password": "ab"
+}
