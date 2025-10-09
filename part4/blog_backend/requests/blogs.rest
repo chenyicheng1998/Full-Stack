@@ -1,12 +1,12 @@
-### Get all blogs
+### Get all blogs (with user population)
 GET http://localhost:3003/api/blogs
 
-### Add a new blog
+### Add a new blog (will be assigned to first user found)
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "First Blog Post",
+  "title": "First Blog Post with User Assignment",
   "author": "John Doe",
   "url": "https://example.com/first-post",
   "likes": 5
@@ -17,8 +17,18 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "React patterns",
+  "title": "React patterns with User",
   "author": "Michael Chan",
   "url": "https://reactpatterns.com/",
   "likes": 7
+}
+
+### Add blog without likes
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Blog Without Likes",
+  "author": "Test Author",
+  "url": "https://example.com/no-likes"
 }
