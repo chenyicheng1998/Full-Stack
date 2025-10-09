@@ -133,4 +133,5 @@ export default [
 
 ```
 npm install cross-env
+npm install --save-dev supertest
 ```
