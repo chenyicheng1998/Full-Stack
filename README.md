@@ -130,3 +130,7 @@ export default [
   },
 ]
 ```
+
+```
+npm install cross-env
+```
