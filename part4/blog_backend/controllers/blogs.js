@@ -21,4 +21,17 @@ blogsRouter.post('/', async (request, response) => {
   }
 })
 
+blogsRouter.delete('/:id', async (request, response) => {
+  try {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (error) {
+    if (error.name === 'CastError') {
+      response.status(400).json({ error: 'Invalid id' })
+    } else {
+      response.status(500).json({ error: 'Internal server error' })
+    }
+  }
+})
+
 module.exports = blogsRouter
