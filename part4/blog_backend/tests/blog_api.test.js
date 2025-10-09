@@ -90,8 +90,34 @@ test('blog without likes property defaults to 0', async () => {
 
   const blogsAtEnd = await helper.blogsInDb()
   const savedBlog = blogsAtEnd.find(blog => blog.title === 'Test Blog Without Likes')
-  
+
   assert.strictEqual(savedBlog.likes, 0)
+})
+
+test('blog without title is not added', async () => {
+  const newBlog = {
+    author: 'Test Author',
+    url: 'http://test.com',
+    likes: 5,
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
+test('blog without url is not added', async () => {
+  const newBlog = {
+    title: 'Test Blog',
+    author: 'Test Author',
+    likes: 5,
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
 after(async () => {
