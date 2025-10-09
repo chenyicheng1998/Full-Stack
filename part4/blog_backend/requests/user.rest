@@ -1,0 +1,32 @@
+### Create a new user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "name": "Test User",
+  "password": "testpassword"
+}
+
+### Get all users
+GET http://localhost:3003/api/users
+
+### Create another user
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "john",
+  "name": "John Doe", 
+  "password": "johnspassword"
+}
+
+### Try to create user with duplicate username (should fail)
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "name": "Another Test User",
+  "password": "anotherpassword"
+}
