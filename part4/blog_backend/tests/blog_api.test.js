@@ -5,12 +5,18 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
+
+    // Create a test user first
+    await helper.createTestUser()
+
     await Blog.insertMany(helper.initialBlogs)
   })
 
@@ -48,6 +54,8 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
+      const token = await helper.getToken()
+
       const newBlog = {
         title: 'Test Blog',
         author: 'Test Author',
@@ -57,6 +65,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -78,6 +87,8 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('blog without likes property defaults to 0', async () => {
+      const token = await helper.getToken()
+
       const newBlog = {
         title: 'Test Blog Without Likes',
         author: 'Test Author',
@@ -86,6 +97,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -97,26 +109,96 @@ describe('when there is initially some blogs saved', () => {
     })
 
     test('fails with status code 400 if title is missing', async () => {
+      const token = await helper.getToken()
+
       const newBlog = {
         author: 'Test Author',
         url: 'http://test.com',
         likes: 5,
       }
 
-      await api.post('/api/blogs').send(newBlog).expect(400)
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400)
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
 
     test('fails with status code 400 if url is missing', async () => {
+      const token = await helper.getToken()
+
       const newBlog = {
         title: 'Test Blog',
         author: 'Test Author',
         likes: 5,
       }
 
-      await api.post('/api/blogs').send(newBlog).expect(400)
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with status code 401 if token is missing', async () => {
+      const newBlog = {
+        title: 'Test Blog',
+        author: 'Test Author',
+        url: 'http://test.com',
+        likes: 5,
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with status code 401 if token is invalid', async () => {
+      const newBlog = {
+        title: 'Test Blog',
+        author: 'Test Author',
+        url: 'http://test.com',
+        likes: 5,
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', 'Bearer invalid_token')
+        .send(newBlog)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with status code 401 if token is expired', async () => {
+      const expiredToken = await helper.getExpiredToken()
+
+      // Wait for token to expire
+      await new Promise(resolve => setTimeout(resolve, 2000))
+
+      const newBlog = {
+        title: 'Test Blog with Expired Token',
+        author: 'Test Author',
+        url: 'http://test.com',
+        likes: 5,
+      }
+
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${expiredToken}`)
+        .send(newBlog)
+        .expect(401)
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)

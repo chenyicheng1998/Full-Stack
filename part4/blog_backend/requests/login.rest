@@ -1,0 +1,35 @@
+### Login with correct credentials (token expires in 1 hour)
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "testpassword"
+}
+
+### Login with wrong password
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "testuser", 
+  "password": "wrongpassword"
+}
+
+### Login with wrong username
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "wronguser",
+  "password": "testpassword"
+}
+
+### Login with bloguser (token expires in 1 hour)
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+  "username": "bloguser",
+  "password": "blogpassword"
+}

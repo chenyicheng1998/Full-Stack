@@ -1,34 +1,35 @@
 ### Get all blogs (with user population)
 GET http://localhost:3003/api/blogs
 
-### Add a new blog (will be assigned to first user found)
+### Add a new blog (requires valid token)
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.TOKEN_WILL_BE_REPLACED_AFTER_LOGIN
 
 {
-  "title": "First Blog Post with User Assignment",
-  "author": "John Doe",
-  "url": "https://example.com/first-post",
-  "likes": 5
+  "title": "Blog Post with JWT Auth",
+  "author": "Authenticated User",
+  "url": "https://example.com/jwt-auth",
+  "likes": 3
 }
 
-### Add another blog
+### Add blog without token (should fail)
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "React patterns with User",
-  "author": "Michael Chan",
-  "url": "https://reactpatterns.com/",
-  "likes": 7
+  "title": "Blog Without Token",
+  "author": "Anonymous",
+  "url": "https://example.com/no-token"
 }
 
-### Add blog without likes
+### Add blog with invalid token (should fail)
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer invalid_token
 
 {
-  "title": "Blog Without Likes",
-  "author": "Test Author",
-  "url": "https://example.com/no-likes"
+  "title": "Blog with Invalid Token",
+  "author": "Hacker",
+  "url": "https://example.com/invalid-token"
 }
