@@ -138,3 +138,6 @@ npm install --save-dev supertest
 ```
 npm install bcrypt
 ```
+```
+npm install jsonwebtoken
+```
