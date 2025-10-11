@@ -10,7 +10,6 @@ import noteService from './services/notes'
 
 const App = () => {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
@@ -32,16 +31,9 @@ const App = () => {
     }
   }, [])
 
-  const addNote = event => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5
-    }
-
+  const addNote = noteObject => {
     noteService.create(noteObject).then(returnedNote => {
       setNotes(notes.concat(returnedNote))
-      setNewNote('')
     })
   }
 
@@ -84,10 +76,6 @@ const App = () => {
     }
   }
 
-  const handleNoteChange = event => {
-    setNewNote(event.target.value)
-  }
-
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
 
   const loginForm = () => (
@@ -102,16 +90,6 @@ const App = () => {
     </Togglable>
   )
 
-  const noteForm = () => (
-    <Togglable buttonLabel="new note">
-      <NoteForm
-        onSubmit={addNote}
-        value={newNote}
-        handleChange={handleNoteChange}
-      />
-    </Togglable>
-  )
-
   return (
     <div>
       <h1>Notes</h1>
@@ -121,7 +99,9 @@ const App = () => {
       {user && (
         <div>
           <p>{user.name} logged in</p>
-          {noteForm()}
+          <Togglable buttonLabel="new note">
+            <NoteForm createNote={addNote} />
+          </Togglable>
         </div>
       )}
 
