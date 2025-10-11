@@ -48,7 +48,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-  const { title, author, url, likes } = request.body
+  const { title, author, url, likes, user } = request.body
 
   const blog = await Blog.findById(request.params.id)
 
@@ -61,9 +61,18 @@ blogsRouter.put('/:id', async (request, response) => {
   blog.url = url
   blog.likes = likes
 
+  // 只有在提供了user字段时才更新user
+  if (user) {
+    blog.user = user
+  }
+
   const updatedBlog = await blog.save()
 
-  response.json(updatedBlog)
+  // 返回时populate用户信息，保持与GET请求一致
+  const populatedBlog = await Blog.findById(updatedBlog._id)
+    .populate('user', { username: 1, name: 1, id: 1 })
+
+  response.json(populatedBlog)
 })
 
 module.exports = blogsRouter
