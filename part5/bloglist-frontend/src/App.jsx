@@ -125,6 +125,28 @@ const App = () => {
     )
   }
 
+  const removeBlog = async (id, title, author) => {
+    if (window.confirm(`Remove blog ${title} by ${author}?`)) {
+      try {
+        await blogService.remove(id)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        setNotification(`Blog '${title}' by ${author} removed`)
+        setNotificationType('success')
+        setTimeout(() => {
+          setNotification(null)
+          setNotificationType(null)
+        }, 5000)
+      } catch {
+        setNotification('Error removing blog')
+        setNotificationType('error')
+        setTimeout(() => {
+          setNotification(null)
+          setNotificationType(null)
+        }, 5000)
+      }
+    }
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -134,7 +156,7 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+          <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
         )}
     </div>
   )
