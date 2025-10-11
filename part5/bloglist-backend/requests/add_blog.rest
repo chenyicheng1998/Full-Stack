@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Clean Code: The Good, the Bad and the Ugly",
+  "author": "Daniel Gerlach",
+  "url": "https://gerlacdt.github.io/blog/posts/clean_code/",
+  "likes": "0"
+}
