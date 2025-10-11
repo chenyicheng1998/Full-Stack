@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -11,6 +12,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -39,7 +42,12 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      console.log('Wrong credentials')
+      setNotification('wrong username or password')
+      setNotificationType('error')
+      setTimeout(() => {
+        setNotification(null)
+        setNotificationType(null)
+      }, 5000)
     }
   }
 
@@ -62,6 +70,12 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+      setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      setNotificationType('success')
+      setTimeout(() => {
+        setNotification(null)
+        setNotificationType(null)
+      }, 5000)
     })
   }
 
@@ -129,6 +143,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={notification} type={notificationType} />
         {loginForm()}
       </div>
     )
@@ -137,6 +152,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={notification} type={notificationType} />
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       {blogForm()}
       {blogs.map(blog =>
