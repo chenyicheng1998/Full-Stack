@@ -144,4 +144,7 @@ npm install jsonwebtoken
 ```
 npm install --save-dev vitest jsdom
 npm install --save-dev @testing-library/react @testing-library/jest-dom
+npm install --save-dev @testing-library/user-event
+
+npm install --save-dev @vitest/coverage-v8
 ```

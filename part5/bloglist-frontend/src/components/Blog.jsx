@@ -29,23 +29,23 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   const showRemove = user && blog.user && (blog.user.username === user.username || blog.user.id === user.id)
 
   return (
-    <div style={blogStyle}>
-      <div>
+    <div style={blogStyle} className="blog">
+      <div className="blog-header">
         {blog.title} {blog.author}
-        <button onClick={toggleVisibility}>
+        <button onClick={toggleVisibility} className="view-button">
           {visible ? 'hide' : 'view'}
         </button>
       </div>
       {visible && (
-        <div>
-          <div>{blog.url}</div>
-          <div>
+        <div className="blog-details">
+          <div className="blog-url">{blog.url}</div>
+          <div className="blog-likes">
             likes {blog.likes}
-            <button onClick={handleLike}>like</button>
+            <button onClick={handleLike} className="like-button">like</button>
           </div>
-          <div>{blog.user ? blog.user.name : 'Unknown user'}</div>
+          <div className="blog-user">{blog.user ? blog.user.name : 'Unknown user'}</div>
           {showRemove && (
-            <button onClick={() => removeBlog(blog.id, blog.title, blog.author)}>
+            <button onClick={() => removeBlog(blog.id, blog.title, blog.author)} className="remove-button">
               remove
             </button>
           )}
