@@ -141,3 +141,7 @@ npm install bcrypt
 ```
 npm install jsonwebtoken
 ```
+```
+npm install --save-dev vitest jsdom
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+```
