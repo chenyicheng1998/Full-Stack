@@ -148,3 +148,11 @@ npm install --save-dev @testing-library/user-event
 
 npm install --save-dev @vitest/coverage-v8
 ```
+```
+npm init playwright@latest
+npm test
+npm test -- --project chromium
+npm run test:report
+npm test -- --ui
+
+```
