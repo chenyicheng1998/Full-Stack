@@ -23,11 +23,16 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
+    try {
+      const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setUser(user)
+        blogService.setToken(user.token)
+      }
+    } catch (error) {
+      console.error('Error parsing user data from localStorage:', error)
+      window.localStorage.removeItem('loggedBlogappUser')
     }
   }, [])
 
@@ -58,17 +63,22 @@ const App = () => {
     setUser(null)
   }
 
-  const addBlog = blogObject => {
-    blogService.create(blogObject).then(returnedBlog => {
+  const addBlog = async blogObject => {
+    try {
+      const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
       setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       setNotificationType('success')
-      setTimeout(() => {
-        setNotification(null)
-        setNotificationType(null)
-      }, 5000)
       blogFormRef.current.toggleVisibility()
-    })
+    } catch (error) {
+      setNotification('Error creating blog')
+      setNotificationType('error')
+    }
+    
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 5000)
   }
 
   const updateBlog = async (id, blogObject) => {
