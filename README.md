@@ -156,3 +156,7 @@ npm run test:report
 npm test -- --ui
 
 ```
+part 6
+```
+npm install redux
+```
