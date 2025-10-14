@@ -159,4 +159,6 @@ npm test -- --ui
 part 6
 ```
 npm install redux
+npm install --save-dev vitest
+npm install --save-dev deep-freeze
 ```
