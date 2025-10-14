@@ -26,7 +26,11 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
 
   const savedBlog = await blog.save()
 
-  response.status(201).json(savedBlog)
+  // 返回时populate用户信息，保持与GET请求一致
+  const populatedBlog = await Blog.findById(savedBlog._id)
+    .populate('user', { username: 1, name: 1, id: 1 })
+
+  response.status(201).json(populatedBlog)
 })
 
 blogsRouter.delete('/:id', userExtractor, async (request, response) => {
