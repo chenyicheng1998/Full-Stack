@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { current } from '@reduxjs/toolkit'
 
 const initialState = [
     {
@@ -34,6 +35,9 @@ const noteSlice = createSlice({
                 ...noteToChange,
                 important: !noteToChange.important
             }
+
+            console.log(current(state))
+            
             return state.map(note => (note.id !== id ? note : changedNote))
         }
     }
