@@ -162,4 +162,5 @@ npm install redux
 npm install --save-dev vitest
 npm install --save-dev deep-freeze
 npm install react-redux
+npm install @reduxjs/toolkit
 ```
