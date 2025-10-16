@@ -163,4 +163,6 @@ npm install --save-dev vitest
 npm install --save-dev deep-freeze
 npm install react-redux
 npm install @reduxjs/toolkit
+npm install json-server --save-dev
+npm install axios
 ```
