@@ -1,27 +1,29 @@
 const baseUrl = 'http://localhost:3001/notes'
 
 const getAll = async () => {
-    const response = await fetch(baseUrl)
+  const response = await fetch(baseUrl)
 
-    if (!response.ok) {
-        throw new Error('Failed to fetch notes')
-    }
+  if (!response.ok) {
+    throw new Error('Failed to fetch notes')
+  }
 
-    return await response.json()
+  return await response.json()
 }
 
 const createNew = async (content) => {
-    const response = await fetch(baseUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, important: false }),
-    })
+  const options = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, important: false }),
+  }
 
-    if (!response.ok) {
-        throw new Error('Failed to create note')
-    }
+  const response = await fetch(baseUrl, options)
 
-    return await response.json()
+  if (!response.ok) {
+    throw new Error('Failed to create note')
+  }
+
+  return await response.json()
 }
 
 export default { getAll, createNew }

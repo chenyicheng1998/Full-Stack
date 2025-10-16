@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { voteAnecdoteAsync } from '../reducers/anecdoteReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteList = () => {
     const dispatch = useDispatch()
@@ -14,16 +13,8 @@ const AnecdoteList = () => {
         )
     })
 
-    const vote = async (anecdote) => {
-        const updatedAnecdote = {
-            ...anecdote,
-            votes: anecdote.votes + 1
-        }
-
-        const savedAnecdote = await anecdoteService.updateVote(anecdote.id, updatedAnecdote)
-        dispatch(voteAnecdote(savedAnecdote))
-
-        // **修复：使用 setNotificationWithTimeout Thunk**
+    const vote = (anecdote) => {
+        dispatch(voteAnecdoteAsync(anecdote))
         dispatch(setNotificationWithTimeout(`You voted for "${anecdote.content}"`, 5))
     }
 
