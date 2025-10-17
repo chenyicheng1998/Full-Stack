@@ -165,4 +165,5 @@ npm install react-redux
 npm install @reduxjs/toolkit
 npm install json-server --save-dev
 npm install axios
+npm install @tanstack/react-query
 ```
