@@ -167,3 +167,7 @@ npm install json-server --save-dev
 npm install axios
 npm install @tanstack/react-query
 ```
+part7
+```
+npm install react-router-dom
+```
