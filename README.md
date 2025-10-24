@@ -173,4 +173,15 @@ npm install react-router-dom
 npm install react-bootstrap
 npm install @mui/material @emotion/react @emotion/styled
 npm install styled-components
+
+npm install --save-dev webpack webpack-cli
+npm install react react-dom
+npm install @babel/core babel-loader @babel/preset-react --save-dev
+npm install core-js regenerator-runtime
+npm install @babel/preset-env --save-dev
+npm install style-loader css-loader --save-dev
+npm install --save-dev webpack-dev-server
+npm install axios
+npm install json-server --save-dev
+npx static-server
 ```
