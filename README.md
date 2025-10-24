@@ -170,4 +170,7 @@ npm install @tanstack/react-query
 part7
 ```
 npm install react-router-dom
+npm install react-bootstrap
+npm install @mui/material @emotion/react @emotion/styled
+npm install styled-components
 ```
