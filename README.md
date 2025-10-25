@@ -184,4 +184,9 @@ npm install --save-dev webpack-dev-server
 npm install axios
 npm install json-server --save-dev
 npx static-server
+
+npm install -g npm-check-updates
+$ npm-check-updates
+$ ncu -u
+
 ```
